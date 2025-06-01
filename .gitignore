@@ -22,31 +22,25 @@ wheels/
 
 # Virtual Environment
 venv/
-ENV/
 env/
-.env
+ENV/
 
 # IDE
 .idea/
 .vscode/
 *.swp
 *.swo
-.project
-.pydevproject
-.settings/
 
-# Jupyter Notebook
-.ipynb_checkpoints
+# Project specific
+*.h5
+logs/
+*.log
+*.pkl
+*.npy
+*.npz
+gym/
+.ipynb_checkpoints/
 *.ipynb
-
-# Testing
-.coverage
-htmlcov/
-.tox/
-.pytest_cache/
-
-# MuJoCo
-MUJOCO_LOG.TXT
 
 # OS specific
 .DS_Store
