@@ -1,69 +1,89 @@
 # Project TODO List
 
-## High Priority - Core Functionality & Stability
+To train an RL agent to get a high score in Geometry Wars: Retro Evolved from visual input and imitation learning.
+
+## Migration to Gymnasium and Stable Baselines3
+
+*   [x] **Install Libraries:**
+    *   Added `gymnasium` and `stable-baselines3` to `requirements.txt`.
+    *   Successfully installed packages in the virtual environment.
+    *   **Status:** Completed.
+
+*   [x] **Refactor Custom Environment (`geom_wars_env`):**
+    *   [x] Rename old `gym` directory to `geom_wars_env` (initially `custom_gym_env`).
+    *   [x] Restructure `geom_wars_env` to have `envs/` and `utils/` subdirectories.
+        *   [x] `geom_wars_env/utils/window_input.py` (populated with user's code)
+        *   [x] `geom_wars_env/utils/read_memory.py` (populated with user's code)
+        *   [x] `geom_wars_env/envs/geom_wars_env_core.py` (populated with `GeomEnv` class)
+    *   [x] Clean up `__init__.py` files for proper packaging.
+    *   [x] Populate `geom_wars_env/envs/geom_wars_env_core.py` with the `GeomEnv` class logic:
+        *   [x] Inherit from `gymnasium.Env`.
+        *   [x] Adapt screen capture, action handling, reward calculation from reference `geom_wars.py`.
+        *   [x] Ensure `reset()` returns `(obs, info)` and `step()` returns `(obs, reward, terminated, truncated, info)`.
+        *   [x] Update internal imports to use `..utils.window_input` and `..utils.read_memory`.
+    *   [x] Register `GeomEnv` in `geom_wars_env/envs/__init__.py` with `gymnasium.envs.registration.register`.
+    *   **Status:** Completed.
+
+*   [ ] **Update Training Pipeline(s) (e.g., `run.py`, `train_with_demos.py`):**
+    *   [ ] Replace custom agent (e.g., `DQNCNNAgent`) with `stable-baselines3` agents (e.g., `DQN`).
+    *   [ ] Instantiate the `GeomWarsEnv-v0` environment using `gymnasium.make()`.
+    *   [ ] Utilize SB3's `agent.learn()` method for training.
+    *   [ ] Adapt any data loading or preprocessing for SB3.
+    *   [ ] Update TensorBoard logging to use SB3's logger.
+    *   **Status:** Pending.
+
+*   [ ] **Update Imitation Learning (Behavioral Cloning) Pipeline:**
+    *   [ ] Adapt recording script (`record_demo.py`):
+        *   Ensure it saves data (states, actions, rewards, next_states, terminated/truncated) compatible with SB3 or a chosen imitation learning library/method.
+        *   Use the new `geom_wars_env` for interaction.
+    *   [ ] Decide on a behavioral cloning strategy with SB3:
+        *   Consider `stable_baselines3.common.bc.BC` or DAgger if applicable.
+        *   Pre-train an SB3 agent or augment its replay buffer.
+    *   **Status:** Pending.
+
+## High Priority (Legacy - Mostly Completed)
 
 *   [x] **Fix Observation Space and Screen Capture Mismatch:**
-    *   The `observation_space` defined in `gym/envs/aidan_envs/geom_wars.py` now uses consistent dimensions (100x100).
-    *   Screen capture logic has been moved into the environment's `_get_observation()` method.
-    *   Window dimensions and capture region are properly calculated and cached.
-    *   **Status:** Completed - Observation space and screen capture are now consistent.
+    *   Relevant logic to be ported to `geom_wars_env/envs/geom_wars_env_core.py`.
+    *   **Status:** Completed (pending porting to new structure).
 
 *   [x] **Resolve Input Interference with Host Machine:**
-    *   Created new `window_input.py` module using `win32gui.PostMessage` for window-specific input.
-    *   Implemented proper window handle management.
-    *   **Status:** Completed - Input is now window-specific and doesn't interfere with host machine.
+    *   Logic now in `geom_wars_env/utils/window_input.py`.
+    *   **Status:** Completed.
 
 *   [x] **Correct Initial State for Agent:**
-    *   `GeomEnv.reset()` now properly captures and returns initial screen state.
-    *   Screen capture logic centralized in `_get_observation()` method.
-    *   **Status:** Completed - Initial state is now properly captured and returned.
+    *   Relevant logic to be ported to `geom_wars_env/envs/geom_wars_env_core.py`.
+    *   **Status:** Completed (pending porting to new structure).
 
 *   [x] **Ensure Correct State Reshaping for CNN:**
-    *   Observation space updated to include channel dimension: `shape=(STATEX, STATEY, 1)`.
-    *   `_get_observation()` now returns properly shaped grayscale images.
-    *   **Status:** Completed - State reshaping is now correct for CNN input.
+    *   Relevant logic to be ported to `geom_wars_env/envs/geom_wars_env_core.py`.
+    *   **Status:** Completed (pending porting to new structure).
 
-## Medium Priority - RL Mechanics & Training Loop
+## Medium Priority (Legacy - Mostly Completed)
 
 *   [x] **Refine Reward System:**
-    *   [x] **Implement Explicit Survival Reward:**
-        *   Added `SURVIVAL_REWARD` constant for step-by-step survival.
-        *   Added `LIFE_LOST_PENALTY` for life loss.
-    *   [x] **Correct Time-Based Reward Logic:**
-        *   Implemented proper time-based rewards with `TIME_REWARD_INTERVAL`.
-        *   Added `steps_since_last_time_reward` tracking.
-    *   [x] **Balance Rewards:** Implemented balanced reward system with:
-        *   Survival rewards
-        *   Life loss penalties
-        *   Score-based rewards
-        *   Time-based rewards
-    *   [x] **Centralize Reward Calculation:** Moved all reward logic to `_calculate_reward()` in environment.
+    *   All logic to be ported to `_calculate_reward()` in `geom_wars_env/envs/geom_wars_env_core.py`.
+    *   **Status:** Completed (pending porting to new structure).
 
 *   [x] **Centralize Observation Gathering:**
-    *   Moved screen capture to environment's `_get_observation()`.
-    *   Added window caching and error handling.
-    *   Added frame skipping for better performance.
-    *   **Status:** Completed - Observation gathering is now centralized and robust.
+    *   Logic to be ported to `_get_observation()` in `geom_wars_env/envs/geom_wars_env_core.py`.
+    *   **Status:** Completed (pending porting to new structure).
 
-*   [ ] **Implement Imitation Learning (Behavioral Cloning):**
-    *   [ ] Create a script to record human gameplay (states, actions, rewards, next_states, dones).
-        *   Leverage existing screen capture from `run.py` and keyboard input mapping.
-    *   [ ] Decide on a strategy:
-        *   Pre-train the `DQNCNNAgent` using the human data.
-        *   Augment the agent's replay buffer with human demonstrations.
+## Low Priority - Enhancements & Best Practices (To be revisited with SB3)
 
-## Low Priority - Enhancements & Best Practices
+*   [ ] **Systematize Training and Evaluation with Stable Baselines3:**
+    *   [ ] Implement distinct evaluation mode using SB3's `evaluate_policy` or custom callbacks.
+    *   [ ] Plan for systematic hyperparameter tuning (e.g., Optuna integration with SB3).
+    *   [ ] Leverage SB3's built-in TensorBoard logging.
+    *   [ ] Utilize SB3's model checkpointing callbacks.
+    *   **Status:** Pending.
 
-*   [ ] **Systematize Training and Evaluation:**
-    *   [ ] Implement a distinct evaluation mode for the agent.
-    *   [ ] Plan for systematic hyperparameter tuning.
-    *   [ ] Enhance TensorBoard logging.
-    *   [ ] Implement model checkpointing.
-
-*   [ ] **Code Refactoring and Organization:**
-    *   [ ] Manage configurations using a config file or command-line arguments.
-    *   [ ] Review and simplify the main loop in `run.py`.
+*   [x] **Code Refactoring and Organization:**
+    *   [x] Refactored environment code into `geom_wars_env` package.
+    *   [ ] Manage configurations using a config file (e.g., YAML, JSON) or command-line arguments (e.g., `argparse`).
+    *   [ ] Review and simplify main loop in training scripts after SB3 integration.
+    *   **Status:** Partially Completed.
 
 *   [x] **Review `noop` function usage:**
-    *   The `noop` function now correctly maps to `stop(window_handle)`.
-    *   **Status:** Completed - No-op behavior is now properly implemented.
+    *   The `noop` function (mapping to `stop(window_handle)`) is part of `geom_wars_env/utils/window_input.py` and used in `geom_wars_env_core.py`.
+    *   **Status:** Completed.

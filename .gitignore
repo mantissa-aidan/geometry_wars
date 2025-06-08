@@ -45,3 +45,19 @@ gym/
 # OS specific
 .DS_Store
 Thumbs.db
+
+# Data files
+*.csv
+*.zip
+sb3_geom_logs/DQN_ResumableModel/runs/100M_3stack_demos_target10k_20250603-225030/DQN_0/events.out.tfevents.1748955062.grommit.2484.0
+sb3_geom_logs/DQN_ResumableModel/runs/1M_3stack_demos_target10k_20250603-210704/DQN_0/events.out.tfevents.1748948851.grommit.6692.0
+sb3_geom_logs/DQN_ResumableModel/runs/20250602-215859/DQN_0/events.out.tfevents.1748865550.grommit.18964.0
+sb3_geom_logs/DQN_ResumableModel/runs/20250602-220047/DQN_0/events.out.tfevents.1748865658.grommit.2972.0
+sb3_geom_logs/DQN_ResumableModel/runs/20250602-220937/DQN_0/events.out.tfevents.1748866186.grommit.15072.0
+sb3_geom_logs/DQN_ResumableModel/runs/20250602-223305/DQN_0/events.out.tfevents.1748867604.grommit.1228.0
+sb3_geom_logs/DQN_ResumableModel/runs/20250603-080754/DQN_0/events.out.tfevents.1748902093.grommit.14432.0
+sb3_geom_logs/DQN_ResumableModel/runs/20250603-081108/DQN_0/events.out.tfevents.1748902280.grommit.5588.0
+sb3_geom_logs/DQN_ResumableModel/runs/20250603-182904/DQN_0/events.out.tfevents.1748939363.grommit.2200.0
+sb3_geom_logs/DQN_ResumableModel/runs/20250603-183018/DQN_1/events.out.tfevents.1748939431.grommit.5364.0
+sb3_geom_logs/DQN_ResumableModel/runs/new_1M_3stack_demos_20250603-192344/DQN_0/events.out.tfevents.1748942637.grommit.14100.0
+sb3_geom_logs/DQN_ResumableModel/runs/with_demos_20250603-184621/DQN_0/events.out.tfevents.1748940393.grommit.7708.0
